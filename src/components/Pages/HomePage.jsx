@@ -1,9 +1,13 @@
+import React from "react";
+import { LeftDashBoard } from "../components/layout/LeftDashBoard";
+import { BodyPartGrid } from "../components/layout/BodyPartGrid";
+import '../../styles/Homepage.css'
 function Homepage() {
-    
+
     return (
-        <div className="container text-center p-5 bg-light rounded">
-            <h1 className="text-primary">Test</h1>
-            <p className="lead">This is styled with Bootstrap</p>
+        <div className="home-page-main-container">
+            <LeftDashBoard />
+            <BodyPartGrid />
         </div>
     );
 }
