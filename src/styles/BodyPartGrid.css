@@ -1,8 +1,0 @@
-.body-part-grid-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  margin-left: 250px; 
-  width: 55%;
-  margin-top: 20px;
-}

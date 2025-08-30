@@ -1,0 +1,114 @@
+.exercise-list-container{
+  width: 30%;
+  height: 50vh;
+  margin: 20px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  color: white;
+  font-family: system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.table-container {
+  width: 100%;
+  height: 50vh;
+  background: #121212;
+  border-radius: 12px;
+  overflow: hidden;
+  color: white;
+  font-family: system-ui, sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.exercise-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.exercise-table thead {
+  background: #1e1e1e;
+}
+
+.exercise-table th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #b0b0b0;
+}
+
+.exercise-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.exercise-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.note-btn {
+  background: transparent;
+  border: 1px solid #90caf9;
+  border-radius: 6px;
+  color: #90caf9;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.note-btn:hover {
+  background: #90caf9;
+  color: #121212;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #b0b0b0;
+}
+
+.pagination button {
+  background: transparent;
+  border: none;
+  color: #b0b0b0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pagination button:hover {
+  color: white;
+}
+
+/* Add Exercise button styles */
+.add-exercise-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 16px;
+
+.add-exercise-button {
+  background: #1976d2;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.add-exercise-button:hover {
+  background: #1565c0;
+}
+
+.add-exercise-button:active {
+  transform: scale(0.97);
+}
