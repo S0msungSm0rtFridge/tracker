@@ -109,15 +109,16 @@ router.put('/height', async (req, res) => {
 });
 
 //add exercise
-router.put('/addExercise', async (req, res) => {
-    const { weight, reps, sets, date } = req.body;
+router.put('/addExercise', authenticateToken, async (req, res) => {
+    console.log(req.user.id);
+    const { exerciseID, name, weight, reps, sets, } = req.body;
     if( !exerciseID){
-        return res.status(400).send("Need valid inputs");
+        return res.status(400).send("Need valid inputs"); 
     }
     try {
         const user = await User.findByIdAndUpdate(
-            
-            { $push: { exercises : { weight, reps, sets, date } } },
+            req.user.id,
+            { $push: { exercises : {exerciseID, name, weight, reps, sets } } },
             { new: true }
         ).populate('exercises.exerciseID');
         if(!user){
@@ -130,14 +131,14 @@ router.put('/addExercise', async (req, res) => {
 });
 
 //edit exercise
-router.put('/editExercise', async (req, res) => {
-    const { exerciseEntryId, weight, reps, sets, date } = req.body; 
-    if( !exerciseEntryId || !weight || !reps || !sets ){
+router.put('/editExercise', authenticateToken, async (req, res) => {
+    const { exerciseID, weight, reps, sets } = req.body; 
+    if( !exerciseID || !weight || !reps || !sets ){
         return res.status(400).send("Need valid inputs");
     }   
     try {
         const user = await User.findOneAndUpdate(
-            { "exercises._id": exerciseEntryId },
+            { _id: req.user.id, "exercises._id": exerciseID }, 
             { $set: {
                 "exercises.$.weight": weight,
                 "exercises.$.reps": reps,

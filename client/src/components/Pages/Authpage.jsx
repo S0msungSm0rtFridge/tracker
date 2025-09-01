@@ -2,7 +2,7 @@ import { Auth } from "../features/Auth";
 import { useState, useRef } from 'react'
 import '../../styles/Login.css'
 
-function Authpage({setWindowState, setUser}){
+function Authpage({setWindowState}){
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const [userName, setUserName] = useState(false);
@@ -30,8 +30,8 @@ function Authpage({setWindowState, setUser}){
                 <textarea className = "login-page-password-input" placeholder="Enter your password" ref = { passwordRef }></textarea>
                 {password === "Invalid" && <Error/>}
 
-                {(State === "Login" && <button className = "login-page-sign-up" onClick = { () => Auth(1, usernameRef.current.value, passwordRef.current.value, setUserName, setpassword, setState, setWindowState, setUser)}>Sign In</button>)}
-                {(State === "SignUp" && <button className = "login-page-sign-up" onClick = { () => Auth(2, usernameRef.current.value, passwordRef.current.value, setUserName, setpassword, setState, setWindowState, setUser)}>Sign Up</button>)}
+                {(State === "Login" && <button className = "login-page-sign-up" onClick = { () => Auth(1, usernameRef.current.value, passwordRef.current.value, setUserName, setpassword, setState, setWindowState)}>Sign In</button>)}
+                {(State === "SignUp" && <button className = "login-page-sign-up" onClick = { () => Auth(2, usernameRef.current.value, passwordRef.current.value, setUserName, setpassword, setState, setWindowState)}>Sign Up</button>)}
 
                 <span className = "login-page-options-divider"></span>
                 {(State === "Login" && <div onClick = { () => setState("SignUp")}>Don't Have an Account?</div>)}
