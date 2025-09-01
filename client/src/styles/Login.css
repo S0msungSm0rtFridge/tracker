@@ -1,0 +1,103 @@
+/* Main container for the login page */
+.login-page-default {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5; /* soft gray background */
+}
+
+/* Left side logo area */
+.login-page-side-logo {
+    flex: 1;
+    background: url('https://via.placeholder.com/150') center center no-repeat;
+    background-size: 120px 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Divider between logo and form */
+.login-page-middle-divider {
+    width: 1px;
+    background-color: #d3d3d3;
+}
+
+/* Right side: login form */
+.login-page-options {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 50px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+
+}
+
+/* Form title */
+.login-page-options h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #333333;
+}
+
+/* Input fields */
+.login-page-username-input,
+.login-page-password-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.login-page-username-input:focus,
+.login-page-password-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+/* Divider between inputs and buttons */
+.login-page-options-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 15px 0;
+}
+
+/* Sign Up / Sign In button */
+.login-page-sign-up {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.login-page-sign-up:hover {
+    background-color: #0056b3;
+}
+
+.login-page-error-statement {
+  color: #d32f2f; 
+  background: #fdecea; 
+  border: 1px solid #f5c2c0; 
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  display: block;
+  width: 100;
+  text-align: left;
+}

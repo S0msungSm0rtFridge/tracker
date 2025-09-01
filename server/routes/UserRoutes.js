@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/Users');
+const bcrypt = require('bcrypt');
 
-//Get a user
+//Get all user
 router.get('/', async (req, res) => {
     try {
         const user = await User.find().populate('exercises.exerciseID');
@@ -15,29 +16,46 @@ router.get('/', async (req, res) => {
     }
 });
 
+const authenticateToken = require('../middleware/auth');
+
+// GET a user
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password').populate('exercises.exerciseID');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get user' });
+  }
+});
+
 //add a new user
 router.post('/', async (req, res) => {
-    const { userID, userName, password } = req.body
-    if(!userName || !password){
-        res.status(400).send("Need valid inputs");
+  const { userName, password } = req.body;
+  if(!userName || !password) {
+    return res.status(400).send({ error: "Missing username or password", userName, password });  }
+  try {
+    const hashedpassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ userName, password: hashedpassword });
+    return res.json(user);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ message: "Username already taken" });
     }
-    try {
-        const user = await User.create( { userID, userName, password });
-        res.json(user); 
-    }catch (error){
-        res.status(500).json({error : "failed to create the user"});
-    }
+    return res.status(500).json({ error: "failed to create the user",  details: error.message });
+  }
 });
 
 //add bodyweight
 router.put('/bodyweight', async (req, res) => {
-    const { userId, bodyWeight } = req.body;
-    if(!userId || !bodyWeight){
+    const { bodyWeight } = req.body;
+    if( !bodyWeight){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
-            userId, 
+            
             { bodyWeight },
             { new: true }
         );
@@ -51,13 +69,13 @@ router.put('/bodyweight', async (req, res) => {
 });
 //change height
 router.put('/height', async (req, res) => {
-    const { userId, height } = req.body;
-    if(!userId || !height){
+    const { height } = req.body;
+    if(!height){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
-            userId, 
+            
             { height },
             { new: true }
         );
@@ -71,13 +89,13 @@ router.put('/height', async (req, res) => {
 });
 //add age
 router.put('/height', async (req, res) => {
-    const { userId, age } = req.body;
-    if(!userId || !age){
+    const { age } = req.body;
+    if( !age){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
-            userId, 
+            
             { age },
             { new: true }
         );
@@ -92,13 +110,13 @@ router.put('/height', async (req, res) => {
 
 //add exercise
 router.put('/addExercise', async (req, res) => {
-    const { userId, exerciseID, weight, reps, sets, date } = req.body;
-    if(!userId || !exerciseID){
+    const {  exerciseID, weight, reps, sets, date } = req.body;
+    if( !exerciseID){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
-            userId,
+            
             { $push: { exercises : { exerciseID, weight, reps, sets, date } } },
             { new: true }
         ).populate('exercises.exerciseID');
@@ -113,13 +131,13 @@ router.put('/addExercise', async (req, res) => {
 
 //remove exercise
 router.put('/removeExercise', async (req, res) => {
-    const { userId, exerciseEntryId } = req.body;
-    if(!userId || !exerciseEntryId){
+    const { exerciseEntryId } = req.body;
+    if( !exerciseEntryId){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
-            userId,
+          
             { $pull: { exercises : { _id : exerciseEntryId } } },
             { new: true }
         ).populate('exercises.exerciseID');
