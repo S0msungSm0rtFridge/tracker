@@ -11,6 +11,7 @@ const userSchema = new Schema({
 
     exercises : [{
         exerciseID : { type: Schema.Types.ObjectId, ref: 'Exercise' },
+        name : { type: String, required: false},
         weight : { type: Number, required: false},
         reps : { type: Number, required: false},
         sets : { type: Number, required: false},
@@ -20,3 +21,4 @@ const userSchema = new Schema({
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
+

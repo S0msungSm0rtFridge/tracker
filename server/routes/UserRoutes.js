@@ -110,14 +110,14 @@ router.put('/height', async (req, res) => {
 
 //add exercise
 router.put('/addExercise', async (req, res) => {
-    const {  exerciseID, weight, reps, sets, date } = req.body;
+    const { weight, reps, sets, date } = req.body;
     if( !exerciseID){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
             
-            { $push: { exercises : { exerciseID, weight, reps, sets, date } } },
+            { $push: { exercises : { weight, reps, sets, date } } },
             { new: true }
         ).populate('exercises.exerciseID');
         if(!user){
@@ -126,6 +126,31 @@ router.put('/addExercise', async (req, res) => {
         res.json(user);
     }catch (error){
         res.status(500).json({error : "failed to add exercise"});
+    }
+});
+
+//edit exercise
+router.put('/editExercise', async (req, res) => {
+    const { exerciseEntryId, weight, reps, sets, date } = req.body; 
+    if( !exerciseEntryId || !weight || !reps || !sets ){
+        return res.status(400).send("Need valid inputs");
+    }   
+    try {
+        const user = await User.findOneAndUpdate(
+            { "exercises._id": exerciseEntryId },
+            { $set: {
+                "exercises.$.weight": weight,
+                "exercises.$.reps": reps,
+                "exercises.$.sets": sets,
+            }},
+            { new: true }
+        ).populate('exercises.exerciseID');
+        if(!user){
+            return res.status(404).send("could not find the user, an error has occur");
+        }
+        res.json(user);
+    }catch (error){
+        res.status(500).json({error : "failed to edit exercise"});
     }
 });
 

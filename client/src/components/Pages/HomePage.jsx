@@ -2,7 +2,8 @@ import React from "react";
 
 import { LeftDashBoard } from "../components/layout/LeftDashBoard";
 import { BodyPartGrid } from "../components/layout/BodyPartGrid";
-import { ExerciseList } from "../features/ExerciseList";
+import { ExerciseList } from "../components/ui/ExerciseList";
+import { AddExercise } from "../components/ui/AddExercise";
 import { Authpage } from "./Authpage";
 import axios from "axios";
 import { useState } from "react";
@@ -24,12 +25,13 @@ function Homepage() {
             )
         }
         if(windowState[0] === "Home"){
-            console.log(user);
             return (
                 <div className="home-page-main-container">
                     <LeftDashBoard />
                     <BodyPartGrid />
-                    <ExerciseList />
+                    <ExerciseList user={user} setWindowState={setWindowState}/>
+                    {windowState[1] === "AddExercise" && <AddExercise user = {user} bodyPart={""} setWindowState={setWindowState}/>}
+
                 </div>
             )
         }

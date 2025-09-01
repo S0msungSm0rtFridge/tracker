@@ -1,7 +1,9 @@
-import '../../styles/ExerciseList.css'
-import { LiftingWeightChart } from "../components/ui/LiftingWeightChart";
+import '../../../styles/ExerciseList.css'
+import { LiftingWeightChart } from "./LiftingWeightChart";
 
-function ExerciseList({ user, bodypart }) {
+
+function ExerciseList({ user, setWindowState }) {
+
     return (
         <div className="exercise-list-container">
             <div className="table-container">
@@ -16,18 +18,16 @@ function ExerciseList({ user, bodypart }) {
                     </thead>
                     <tbody>
                         {/* THIS WILL BE MAPPED DATA ONCE I ADD A DB */}
-                        <tr>
-                            <td>Bench Press</td>
-                            <td>135</td>
-                            <td>10</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>Incline Dumbbell Press</td>
-                            <td>40</td>
-                            <td>12</td>
-                            <td>3</td>
-                        </tr>
+                        {user.data.exercises.map( (exercise) => {
+                            {/* if bodypart and exercise.muscleGroup === bodypart */}
+                            return (
+                                <tr>
+                                    <td>{exercise.name}</td>
+                                    <td>{exercise.weight}</td>
+                                    <td>{exercise.reps}</td>
+                                    <td>{exercise.sets}</td>
+                                </tr>    
+                        )})}
                     </tbody>
                 </table>
                 <div className="pagination">
@@ -37,7 +37,7 @@ function ExerciseList({ user, bodypart }) {
                     <button>{`>`}</button>
                 </div>
             </div>
-            <button className="add-exercise-button">Add Exercise</button>
+            <button className="add-exercise-button" onClick = { () => setWindowState(["Home", "AddExercise"])}>Add Exercise</button>
             <LiftingWeightChart />
         </div>
        

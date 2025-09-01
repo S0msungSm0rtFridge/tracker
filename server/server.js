@@ -29,7 +29,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
-//app.use('/api/exercises', exerciseRoutes);
+app.use('/api/exercises', exerciseRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
