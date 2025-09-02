@@ -6,59 +6,53 @@ import { ExerciseList } from "../components/ui/ExerciseList";
 import { AddExercise } from "../components/ui/AddExercise";
 import { Authpage } from "./Authpage";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import '../../styles/Homepage.css'
 
 function Homepage() {
+    const [user, setUser] = useState(null);
+    const [windowState, setWindowState] = useState(["Authpage", null]);
 
+    const fetchUser = useCallback(async () => {
+    try {
+        const res = await axios.get("http://localhost:5000/api/users/me", { withCredentials: true });
+        setUser(res);
+    } catch (err) {
+        console.error(err);
+    }
+    }, []);
 
-    const WindowHandler = () => {
+    useEffect(() => {
+        fetchUser();
+    }, [windowState, fetchUser]);
 
-        
-        const [user, setUser] = useState(null);
+    if (windowState[0] === "Authpage") {
+        return (
+            <div className="home-page-main-container">
+                <Authpage setWindowState={setWindowState} setUser={setUser} />
+            </div>
+        );
+    }
 
-        useEffect(() => {
-            const fetchUser = async () => {
-                try{
-                    const user = await axios.get("http://localhost:5000/api/users/me", { withCredentials: true });
-                    setUser(user.data);                
-                } catch (error){
-                    console.log(error);
-                }
-
-            }
-            fetchUser();
-
-        },)
-        const [windowState, setWindowState] = useState(["Authpage", null]);
-
-        if(windowState[0] === "Authpage"){
-            return (
-                <div className="home-page-main-container">
-                    <Authpage setWindowState = {setWindowState}/>
-                </div>
-            )
-        }
-        if(windowState[0] === "Home"){
-            return (
-                <div className="home-page-main-container">
-                    <LeftDashBoard />
-                    <BodyPartGrid />
-                    <ExerciseList user={user} setWindowState={setWindowState}/>
-                    {windowState[1] === "AddExercise" && <AddExercise user = {user} bodyPart={""} setWindowState={setWindowState}/>}
-
-                </div>
-            )
+    if (windowState[0] === "Home") {
+        return (
+            <div className="home-page-main-container">
+                <LeftDashBoard />
+                <BodyPartGrid />
+                <ExerciseList user={user} setWindowState={setWindowState} />
+                {windowState[1] === "AddExercise" && (
+                    <AddExercise
+                    user={user}
+                    bodyPart=""
+                    setWindowState={setWindowState}
+                    fetchUser={fetchUser}
+                    />
+                )}
+            </div>
+            );
         }
     }
-    
 
-    return (
-        <div className="home-page-main-container">
-            <WindowHandler />
-        </div>
-    );
-}
 
 export { Homepage };

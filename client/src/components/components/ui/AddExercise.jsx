@@ -73,6 +73,9 @@ function AddExercise({user, bodyPart, setWindowState}){
                 { withCredentials: true }
             );
         }
+
+            
+        
         setWindowState(["Home"]);
     }
 
