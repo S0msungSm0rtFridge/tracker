@@ -1,4 +1,5 @@
 import '../../../styles/ExerciseList.css'
+import { AddExercise } from './AddExercise';
 import { LiftingWeightChart } from "./LiftingWeightChart";
 
 
@@ -21,7 +22,7 @@ function ExerciseList({ user, setWindowState }) {
                         {user.data.exercises.map( (exercise) => {
                             {/* if bodypart and exercise.muscleGroup === bodypart */}
                             return (
-                                <tr>
+                                <tr onClick = { () => setWindowState(["Edit", exercise])}>
                                     <td>{exercise.name}</td>
                                     <td>{exercise.weight}</td>
                                     <td>{exercise.reps}</td>

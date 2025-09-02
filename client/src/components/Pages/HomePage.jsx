@@ -3,7 +3,7 @@ import React from "react";
 import { LeftDashBoard } from "../components/layout/LeftDashBoard";
 import { BodyPartGrid } from "../components/layout/BodyPartGrid";
 import { ExerciseList } from "../components/ui/ExerciseList";
-import { AddExercise } from "../components/ui/AddExercise";
+import { AddExercise, EditExercise } from "../components/ui/AddExercise";
 import { Authpage } from "./Authpage";
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
@@ -30,7 +30,7 @@ function Homepage() {
     if (windowState[0] === "Authpage") {
         return (
             <div className="home-page-main-container">
-                <Authpage setWindowState={setWindowState} setUser={setUser} />
+                <Authpage setWindowState={setWindowState} />
             </div>
         );
     }
@@ -46,9 +46,23 @@ function Homepage() {
                     user={user}
                     bodyPart=""
                     setWindowState={setWindowState}
-                    fetchUser={fetchUser}
                     />
                 )}
+            </div>
+            );
+        }
+    if (windowState[0] === "Edit") {
+        return (
+            <div className="home-page-main-container">
+                <LeftDashBoard />
+                <BodyPartGrid />
+                <ExerciseList user={user} setWindowState={setWindowState} />
+                <EditExercise
+                    exercise={windowState[1]}
+                    setWindowState={setWindowState}
+                    
+                />
+
             </div>
             );
         }

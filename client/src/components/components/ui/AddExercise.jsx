@@ -110,4 +110,72 @@ function AddExercise({user, bodyPart, setWindowState}){
     )
 }
 
-export { AddExercise }
+function EditExercise({exercise, setWindowState}){
+
+    const setsInput = useRef(null);
+    const repsInput = useRef(null);
+    const weightInput = useRef(null);
+
+
+    const save = async () => {
+
+        if(!repsInput.current.value || !setsInput.current.value || !weightInput.current.value){
+            alert("please fill out all forms");
+            return;
+        }
+
+
+        await axios.put(
+            "http://localhost:5000/api/users/editExercise",
+            {
+                exerciseID: exercise._id, 
+                weight: weightInput.current.value,
+                reps: repsInput.current.value,
+                sets: setsInput.current.value
+            },
+            { withCredentials: true }
+        );
+
+
+        setWindowState(["Home"]);
+    }
+
+    const del = async () => {
+        try{
+            console.log("runs")
+            await axios.put(
+            "http://localhost:5000/api/users/removeExercise",
+            {
+                exerciseID: exercise._id, 
+            },
+            { withCredentials: true }
+            );
+        } catch (error){
+            console.log(error);
+        }
+        console.log(exercise);
+        setWindowState(["Home"]);
+    }
+
+
+    
+    return (
+        <div className = "add-exercise-main-container">
+            <div className = "add-exercise-page-title">{exercise.name}</div>
+            <div className = "add-exercise-page-discriptor">Enter designated reps and sets</div>
+            <div className = "add-exercise-page-form">
+                <div></div>
+                <input type = "number" ref = { weightInput } placeholder = "Weight" className = "add-exercise-page-number-input"></input>
+                <input type = "number" ref = { repsInput } placeholder = "number of reps" className = "add-exercise-page-number-input"></input>
+                <input type = "number" ref = { setsInput } placeholder = "number of sets" className = "add-exercise-page-number-input"></input>
+            </div>
+            <div className = "add-exercise-button-group">
+                <button className = "add-exercise-button" onClick = { () => setWindowState(["Home"])}>Cancel</button>
+                <button className = "add-exercise-button" onClick = { () => save()}>Save</button>
+                <button className = "add-exercise-button" onClick = { () => del()}>delete</button>
+            </div>
+        </div>
+    )
+}
+
+export { AddExercise, EditExercise }

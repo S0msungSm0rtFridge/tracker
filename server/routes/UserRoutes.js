@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/Users');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 //Get all user
 router.get('/', async (req, res) => {
@@ -156,22 +157,24 @@ router.put('/editExercise', authenticateToken, async (req, res) => {
 });
 
 //remove exercise
-router.put('/removeExercise', async (req, res) => {
-    const { exerciseEntryId } = req.body;
-    if( !exerciseEntryId){
+router.put('/removeExercise', authenticateToken, async (req, res) => {
+    const { exerciseID } = req.body;
+    if(!exerciseID){
         return res.status(400).send("Need valid inputs");
     }
     try {
         const user = await User.findByIdAndUpdate(
-          
-            { $pull: { exercises : { _id : exerciseEntryId } } },
+            req.user.id,
+            { $pull: { exercises : { _id : exerciseID } } },
             { new: true }
         ).populate('exercises.exerciseID');
+        console.log(user);
         if(!user){
             return res.status(404).send("could not find the user, an error has occur");
         }
         res.json(user);
     }catch (error){
+        console.log(error);
         res.status(500).json({error : "failed to remove exercise"});
     }   
 });
