@@ -1,9 +1,10 @@
 import '../../../styles/ExerciseList.css'
 import { AddExercise } from './AddExercise';
-import { LiftingWeightChart } from "./LiftingWeightChart";
-
+import { useExercise } from '../../wrappers/ExerciseSelector';
 
 function ExerciseList({ user, setWindowState }) {
+
+    const { setSelectedExercise } = useExercise();
 
     return (
         <div className="exercise-list-container">
@@ -15,6 +16,7 @@ function ExerciseList({ user, setWindowState }) {
                             <th>Weight</th>
                             <th>Reps</th>
                             <th>Sets</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -22,11 +24,12 @@ function ExerciseList({ user, setWindowState }) {
                         {user.data.exercises.map( (exercise) => {
                             {/* if bodypart and exercise.muscleGroup === bodypart */}
                             return (
-                                <tr onClick = { () => setWindowState(["Edit", exercise])}>
-                                    <td>{exercise.name}</td>
-                                    <td>{exercise.weight}</td>
-                                    <td>{exercise.reps}</td>
-                                    <td>{exercise.sets}</td>
+                                <tr onClick = { () => setSelectedExercise(exercise)}>
+                                    <td>{exercise?.name}</td>
+                                    <td>{exercise?.weight}</td>
+                                    <td>{exercise?.reps}</td>
+                                    <td>{exercise?.sets}</td>
+                                    <th onClick = { () => setWindowState(["Home", "Edit", exercise])}>Edit</th>
                                 </tr>    
                         )})}
                     </tbody>
@@ -39,7 +42,6 @@ function ExerciseList({ user, setWindowState }) {
                 </div>
             </div>
             <button className="add-exercise-button" onClick = { () => setWindowState(["Home", "AddExercise"])}>Add Exercise</button>
-            <LiftingWeightChart />
         </div>
        
     );

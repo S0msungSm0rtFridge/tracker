@@ -79,6 +79,25 @@ function AddExercise({user, bodyPart, setWindowState}){
         setWindowState(["Home"]);
     }
 
+    const isDup = () => {
+
+        if(!exerciseInput.current.value || !repsInput.current.value || !setsInput.current.value || !weightInput.current.value){
+            alert("please fill out all forms");
+            return;
+        }
+
+        
+        const dup = user.data.exercises.find( (exercise) => {
+            return exercise.name.toLowerCase().trim() === exerciseInput.current.value.toLowerCase().trim();
+        });
+
+        if(dup){
+            alert("that exercise already exist");
+        } else{
+            alert("HAVENT DECIDED IF I WANT TO ALLOW PEOPLE TO ADD EXERCISES AND IF YES HOW SHOUOLD I EVEN VALIDATE");
+        }
+    } 
+
 
     
     return (

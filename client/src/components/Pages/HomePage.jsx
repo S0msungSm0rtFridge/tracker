@@ -3,8 +3,12 @@ import React from "react";
 import { LeftDashBoard } from "../components/layout/LeftDashBoard";
 import { BodyPartGrid } from "../components/layout/BodyPartGrid";
 import { ExerciseList } from "../components/ui/ExerciseList";
+import { LiftingWeightChart } from "../components/ui/LiftingWeightChart";
 import { AddExercise, EditExercise } from "../components/ui/AddExercise";
 import { Authpage } from "./Authpage";
+
+import { ExerciseProvider } from "../wrappers/ExerciseSelector";
+
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 
@@ -35,34 +39,33 @@ function Homepage() {
         );
     }
 
+    //add a wrapper around all of this to consatnly update body part and exercise selected
     if (windowState[0] === "Home") {
         return (
             <div className="home-page-main-container">
-                <LeftDashBoard />
-                <BodyPartGrid />
-                <ExerciseList user={user} setWindowState={setWindowState} />
-                {windowState[1] === "AddExercise" && (
-                    <AddExercise
-                    user={user}
-                    bodyPart=""
-                    setWindowState={setWindowState}
-                    />
-                )}
-            </div>
-            );
-        }
-    if (windowState[0] === "Edit") {
-        return (
-            <div className="home-page-main-container">
-                <LeftDashBoard />
-                <BodyPartGrid />
-                <ExerciseList user={user} setWindowState={setWindowState} />
-                <EditExercise
-                    exercise={windowState[1]}
-                    setWindowState={setWindowState}
-                    
-                />
+                <ExerciseProvider>
+                    <LeftDashBoard />
+                    <BodyPartGrid />
+                    <div className = "home-page-right-side-container">
+                        <ExerciseList user={user} setWindowState={setWindowState} />
 
+                        {windowState[1] === "AddExercise" && (
+                            <AddExercise
+                            user={user}
+                            bodyPart=""
+                            setWindowState={setWindowState}
+                            />
+                        )}
+                        { windowState[1] === "Edit" && (
+                            <EditExercise
+                            exercise={windowState[2]}
+                            setWindowState={setWindowState}
+                        />
+                        )}
+
+                        <LiftingWeightChart />
+                    </div>
+                </ExerciseProvider>
             </div>
             );
         }

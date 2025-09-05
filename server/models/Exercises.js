@@ -6,7 +6,8 @@ const exerciseSchema = new Schema({
     description : { type: String, required: false},
     muscleGroup : { type: String, required: false},
     difficulty : { type: String, required: false},
-    similar : [{ type: Schema.Types.ObjectId, ref: 'Exercise' }]
+    similar : [{ type: Schema.Types.ObjectId, ref: 'Exercise' }],
+    videoUrl: { type: String }
 });
 
 const Exercise = mongoose.model('Exercise', exerciseSchema);
