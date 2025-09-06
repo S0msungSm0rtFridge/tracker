@@ -1,10 +1,11 @@
 import '../../../styles/LiftingWeightChart.css'
 import { useExercise } from '../../wrappers/ExerciseSelector';
+import { memo } from "react";
 
-function LiftingWeightChart() {
+function LiftingWeightChartComponent() {
 
     const { selectedExercise } = useExercise();
-    console.log(selectedExercise?.exerciseID?.videoUrl);
+    if (!selectedExercise?.exerciseID?.videoUrl) return null;
     return (
         <div className="example-video-container">
             {selectedExercise?.exerciseID?.videoUrl && (
@@ -21,4 +22,4 @@ function LiftingWeightChart() {
     );
 }
 
-export { LiftingWeightChart }
+export const LiftingWeightChart = memo(LiftingWeightChartComponent);

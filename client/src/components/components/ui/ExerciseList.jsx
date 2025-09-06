@@ -8,8 +8,8 @@ function ExerciseList() {
 
     const { user } = useAuth();
     const navigate = useNavigate();
-    const { setSelectedExercise } = useExercise();
-
+    const { setSelectedExercise, setSelectedBodyPart, bodyPart } = useExercise();
+    
     return (
         <div className="exercise-list-container">
             <div className="table-container">
@@ -25,17 +25,29 @@ function ExerciseList() {
                     </thead>
                     <tbody>
                         {/* THIS WILL BE MAPPED DATA ONCE I ADD A DB */}
-                        {user?.data?.exercises?.map( (exercise) => {
-                            {/* if bodypart and exercise.muscleGroup === bodypart */}
-                            return (
-                                <tr onClick = { () => setSelectedExercise(exercise)}>
-                                    <td>{exercise?.name}</td>
-                                    <td>{exercise?.weight}</td>
-                                    <td>{exercise?.reps}</td>
-                                    <td>{exercise?.sets}</td>
-                                    <th onClick = { () => navigate(`edit/${exercise?._id}`)}>Edit</th>
-                                </tr>    
-                        )})}
+                    {user?.data?.exercises
+                        ?.filter(exercise => bodyPart === "All" || bodyPart === exercise.exerciseID.muscleGroup) 
+                        .map(exercise => (
+                            <tr
+                            key={exercise._id}
+                            onClick={() => {
+                            setSelectedExercise(exercise);
+                            setSelectedBodyPart(exercise.exerciseID.muscleGroup);
+                            }}
+                            >
+                                <td>{exercise?.name}</td>
+                                <td>{exercise?.weight}</td>
+                                <td>{exercise?.reps}</td>
+                                <td>{exercise?.sets}</td>
+
+                                <th onClick={(e) => { 
+                                e.stopPropagation(); 
+                                navigate(`edit/${exercise?._id}`);
+                                }}>
+                                Edit
+                                </th>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 <div className="pagination">

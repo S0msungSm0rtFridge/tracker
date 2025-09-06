@@ -7,7 +7,6 @@ import { BodyPartGrid } from "../components/layout/BodyPartGrid";
 import { ExerciseList } from "../components/ui/ExerciseList";
 import { LiftingWeightChart } from "../components/ui/LiftingWeightChart";
 import { AddExercise, EditExercise } from "../components/ui/AddExercise";
-import { ExerciseProvider } from "../wrappers/ExerciseSelector";
 
 import { useAuth } from '../wrappers/AuthProvider'
 
@@ -17,8 +16,7 @@ function Homepage() {
 
     const { refreshUser } = useAuth();
     return (
-        <ExerciseProvider>
-            <div className="home-page-main-container">
+        <div className="home-page-main-container">
             <LeftDashBoard />
             <BodyPartGrid />
             
@@ -30,10 +28,9 @@ function Homepage() {
                 </Routes>
 
                 {/* Chart can always show */}
-                <LiftingWeightChart />
+                {/* <LiftingWeightChart /> */}
             </div>
-            </div>
-        </ExerciseProvider>
+        </div>
         );
     }
 

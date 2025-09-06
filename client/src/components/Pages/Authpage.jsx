@@ -39,6 +39,8 @@ function Authpage(){
         if (result === "success") {
             await refreshUser();
             setSuccess(true);
+        }else{
+            alert("incorrect username or password");
         }
     };
 
