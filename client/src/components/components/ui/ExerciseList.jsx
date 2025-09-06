@@ -1,9 +1,13 @@
 import '../../../styles/ExerciseList.css'
-import { AddExercise } from './AddExercise';
 import { useExercise } from '../../wrappers/ExerciseSelector';
+import { useNavigate } from "react-router-dom";
+import { useAuth  } from '../../wrappers/AuthProvider'
 
-function ExerciseList({ user, setWindowState }) {
 
+function ExerciseList() {
+
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const { setSelectedExercise } = useExercise();
 
     return (
@@ -21,7 +25,7 @@ function ExerciseList({ user, setWindowState }) {
                     </thead>
                     <tbody>
                         {/* THIS WILL BE MAPPED DATA ONCE I ADD A DB */}
-                        {user.data.exercises.map( (exercise) => {
+                        {user?.data?.exercises?.map( (exercise) => {
                             {/* if bodypart and exercise.muscleGroup === bodypart */}
                             return (
                                 <tr onClick = { () => setSelectedExercise(exercise)}>
@@ -29,7 +33,7 @@ function ExerciseList({ user, setWindowState }) {
                                     <td>{exercise?.weight}</td>
                                     <td>{exercise?.reps}</td>
                                     <td>{exercise?.sets}</td>
-                                    <th onClick = { () => setWindowState(["Home", "Edit", exercise])}>Edit</th>
+                                    <th onClick = { () => navigate(`edit/${exercise?._id}`)}>Edit</th>
                                 </tr>    
                         )})}
                     </tbody>
@@ -41,7 +45,7 @@ function ExerciseList({ user, setWindowState }) {
                     <button>{`>`}</button>
                 </div>
             </div>
-            <button className="add-exercise-button" onClick = { () => setWindowState(["Home", "AddExercise"])}>Add Exercise</button>
+            <button className="add-exercise-button" onClick = { () => navigate("add-exercise")}>Add Exercise</button>
         </div>
        
     );

@@ -1,8 +1,14 @@
 import { useEffect, useState, useRef } from "react"
 import axios from "axios"
 import '../../../styles/AddExercise.css'
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth  } from '../../wrappers/AuthProvider'
 
-function AddExercise({user, bodyPart, setWindowState}){
+
+function AddExercise({bodyPart}){
+
+    const { user, refreshUser } = useAuth();
+    const navigate = useNavigate();
 
     const [exercises, setExercises] = useState([]);
     const exerciseInput = useRef(null);
@@ -45,7 +51,7 @@ function AddExercise({user, bodyPart, setWindowState}){
             return;
         }
 
-        const dup = user.data.exercises.find( (exercise) => {
+        const dup = user?.data?.exercises?.find( (exercise) => {
             return exercise.name.toLowerCase().trim() === exerciseInput.current.value.toLowerCase().trim();
         });
 
@@ -75,8 +81,8 @@ function AddExercise({user, bodyPart, setWindowState}){
         }
 
             
-        
-        setWindowState(["Home"]);
+        refreshUser();
+        navigate("/home");
     }
 
     const isDup = () => {
@@ -87,11 +93,12 @@ function AddExercise({user, bodyPart, setWindowState}){
         }
 
         
-        const dup = user.data.exercises.find( (exercise) => {
+        const dup = user?.data?.exercises?.find( (exercise) => {
             return exercise.name.toLowerCase().trim() === exerciseInput.current.value.toLowerCase().trim();
         });
 
         if(dup){
+            console.log("runs");
             alert("that exercise already exist");
         } else{
             alert("HAVENT DECIDED IF I WANT TO ALLOW PEOPLE TO ADD EXERCISES AND IF YES HOW SHOUOLD I EVEN VALIDATE");
@@ -121,7 +128,7 @@ function AddExercise({user, bodyPart, setWindowState}){
                 <input type = "number" ref = { setsInput } placeholder = "number of sets" className = "add-exercise-page-number-input"></input>
             </div>
             <div className = "add-exercise-button-group">
-                <button className = "add-exercise-button" onClick = { () => setWindowState(["Home"])}>Cancel</button>
+                <button className = "add-exercise-button" onClick = { () => navigate("/home")}>Cancel</button>
                 <button className = "add-exercise-button" onClick = { () => save()}>Save</button>
                 <button className = "add-exercise-button" onClick = { () => isDup()}>Add New Exercise</button>
             </div>
@@ -129,12 +136,16 @@ function AddExercise({user, bodyPart, setWindowState}){
     )
 }
 
-function EditExercise({exercise, setWindowState}){
+function EditExercise(){
 
     const setsInput = useRef(null);
     const repsInput = useRef(null);
     const weightInput = useRef(null);
+    const navigate = useNavigate();
 
+    const { exerciseId } = useParams();  
+    const { user, refreshUser } = useAuth();
+    const exercise = user?.data?.exercises?.find(e => e._id === exerciseId);
 
     const save = async () => {
 
@@ -155,8 +166,8 @@ function EditExercise({exercise, setWindowState}){
             { withCredentials: true }
         );
 
-
-        setWindowState(["Home"]);
+        refreshUser();
+        navigate("/home");
     }
 
     const del = async () => {
@@ -172,8 +183,8 @@ function EditExercise({exercise, setWindowState}){
         } catch (error){
             console.log(error);
         }
-        console.log(exercise);
-        setWindowState(["Home"]);
+        refreshUser();
+        navigate("/home");
     }
 
 
@@ -189,7 +200,7 @@ function EditExercise({exercise, setWindowState}){
                 <input type = "number" ref = { setsInput } placeholder = "number of sets" className = "add-exercise-page-number-input"></input>
             </div>
             <div className = "add-exercise-button-group">
-                <button className = "add-exercise-button" onClick = { () => setWindowState(["Home"])}>Cancel</button>
+                <button className = "add-exercise-button" onClick = { () => navigate("/home")}>Cancel</button>
                 <button className = "add-exercise-button" onClick = { () => save()}>Save</button>
                 <button className = "add-exercise-button" onClick = { () => del()}>delete</button>
             </div>

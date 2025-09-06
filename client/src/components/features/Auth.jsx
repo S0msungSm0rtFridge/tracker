@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //THIS SHIT IS A MESS NEED TO CLEAN UP JESUS
 
-async function Auth (LoS, username, userPassword, setUserName, setpassword, setState, setWindowState) {
+async function Auth (LoS, username, userPassword, setUserName, setpassword, navigate, setUser) {
     if(!username || username.includes(" ")){
         username = "Invalid";
         setUserName("Invalid");
@@ -24,7 +24,8 @@ async function Auth (LoS, username, userPassword, setUserName, setpassword, setS
                 const res = await axios.post('http://localhost:5000/api/auth/login', { userName: username, password: userPassword }, { withCredentials: true });
                     if (res.data.message === "Login successful") {
                         console.log("✅ Login success!");
-                        setWindowState(["Home", null]);
+                        setUser(res.data);
+                        return "success"
                     } else {
                         console.log("Login failed:", res.data.message);
                         }
@@ -37,7 +38,7 @@ async function Auth (LoS, username, userPassword, setUserName, setpassword, setS
             try{
                 
                 const user = await axios.post('http://localhost:5000/api/users', { userName: username, password: userPassword }, { withCredentials: true });
-                setState("Login");
+                navigate("/auth/login");
             }catch(error){
                 if (error.response?.status === 409) {
                     alert("Username already taken!");
