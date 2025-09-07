@@ -12,7 +12,7 @@ function ExerciseList() {
     const { setSelectedExercise, setSelectedBodyPart, bodyPart } = useExercise();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 10;
+    const rowsPerPage = 8;
 
     const filteredExercises = user?.data?.exercises?.filter(
     (exercise) => bodyPart === "All" || bodyPart === exercise?.exerciseID?.muscleGroup
