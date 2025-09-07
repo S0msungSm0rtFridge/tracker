@@ -39,6 +39,7 @@ async function Auth (LoS, username, userPassword, setUserName, setpassword, navi
                 
                 const user = await axios.post('http://localhost:5000/api/users', { userName: username, password: userPassword }, { withCredentials: true });
                 navigate("/auth/login");
+                return("success")
             }catch(error){
                 if (error.response?.status === 409) {
                     alert("Username already taken!");

@@ -4,7 +4,7 @@ const ExerciseWrapper = createContext();
 
 export function ExerciseProvider( { children } ){
 
-    const [selectedExercise, setSelectedExercise] = useState(null);
+    const [selectedExercise, setSelectedExercise] = useState();
     const [bodyPart, setSelectedBodyPart] = useState();
 
      return (

@@ -15,13 +15,24 @@ export const AuthProvider = ({ children }) => {
         console.error(err);
         }
   };
-
+  const logout = async () => {
+      try {
+          await axios.post(
+              'http://localhost:5000/api/auth/logout',
+              {},
+              { withCredentials: true }
+          );
+          setUser(null);
+      } catch (err) {
+          console.error("Logout failed:", err);
+      }
+  };
   useEffect(() => {
     refreshUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, refreshUser }}>
+    <AuthContext.Provider value={{ user, setUser, refreshUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

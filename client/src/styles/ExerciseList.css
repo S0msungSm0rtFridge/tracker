@@ -1,67 +1,70 @@
-.exercise-list-container{
-  width: 100%;
-  height: 50vh;
-  margin: 20px auto;
+.exercise-list-container {
+  padding: 20px;
+  background-color: #1e1e1e; /* dark background */
   border-radius: 12px;
-  overflow: hidden;
-  color: white;
-  font-family: system-ui, sans-serif;
-  display: flex;
-  flex-direction: column;
-  
+  color: #f5f5f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .table-container {
-  width: 100%;
-  height: 50vh;
-  background: #121212;
-  border-radius: 12px;
-  overflow: hidden;
-  color: white;
-  font-family: system-ui, sans-serif;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  overflow-x: auto;
 }
 
 .exercise-table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .exercise-table thead {
-  background: #1e1e1e;
-}
-
-.exercise-table th {
-  text-align: left;
-  padding: 12px;
-  font-weight: 500;
-  font-size: 14px;
+  background-color: #2a2a2a;
   color: #b0b0b0;
 }
 
+.exercise-table th,
 .exercise-table td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #333;
 }
 
-.exercise-table tr:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.note-btn {
-  background: transparent;
-  border: 1px solid #90caf9;
-  border-radius: 6px;
-  color: #90caf9;
-  padding: 4px 8px;
-  font-size: 12px;
+.exercise-table tbody tr {
+  transition: background-color 0.2s;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.note-btn:hover {
-  background: #90caf9;
-  color: #121212;
+.exercise-table tbody tr:hover {
+  background-color: #2c2c2c;
+}
+
+.exercise-table th:last-child,
+.exercise-table td:last-child {
+  text-align: center;
+}
+
+.exercise-table th button,
+.exercise-table td button,
+.exercise-table th,
+.exercise-table td {
+  font-size: 14px;
+}
+
+.exercise-table th button,
+.exercise-table td button {
+  background: #3a6ed8;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.exercise-table th button:hover,
+.exercise-table td button:hover {
+  background: #2f58a0;
 }
 
 .pagination {
@@ -69,46 +72,43 @@
   justify-content: flex-end;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  margin-top: 12px;
   font-size: 13px;
-  color: #b0b0b0;
+  color: #bbb;
 }
 
 .pagination button {
-  background: transparent;
+  background: #2a2a2a;
   border: none;
-  color: #b0b0b0;
-  font-size: 16px;
+  color: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background 0.2s;
 }
 
-.pagination button:hover {
-  color: white;
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-/* Add Exercise button styles */
-.add-exercise-container {
-  display: flex;
-  justify-content: flex-end;
-  margin: 16px;
+.pagination button:hover:not(:disabled) {
+  background: #3a3a3a;
+}
 
 .add-exercise-button {
-  background: #1976d2;
+  margin-top: 16px;
+  width: 100%;
+  background: #3a6ed8;
   color: white;
-  font-weight: 600;
+  padding: 12px;
+  font-weight: bold;
   border: none;
-  padding: 10px 18px;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: background 0.2s;
 }
 
 .add-exercise-button:hover {
-  background: #1565c0;
-}
-
-.add-exercise-button:active {
-  transform: scale(0.97);
+  background: #2f58a0;
 }

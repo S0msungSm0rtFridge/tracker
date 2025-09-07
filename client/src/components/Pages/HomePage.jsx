@@ -28,7 +28,7 @@ function Homepage() {
                 </Routes>
 
                 {/* Chart can always show */}
-                {/* <LiftingWeightChart /> */}
+                <LiftingWeightChart />
             </div>
         </div>
         );

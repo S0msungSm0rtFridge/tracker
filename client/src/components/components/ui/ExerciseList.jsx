@@ -12,11 +12,13 @@ function ExerciseList() {
     const { setSelectedExercise, setSelectedBodyPart, bodyPart } = useExercise();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 8;
+    const rowsPerPage = 7;
 
     const filteredExercises = user?.data?.exercises?.filter(
-    (exercise) => bodyPart === "All" || bodyPart === exercise?.exerciseID?.muscleGroup
+    (exercise) => !bodyPart || bodyPart === "All" || bodyPart === exercise?.exerciseID?.muscleGroup
     ) || [];
+
+    //console.log(filteredExercises);
 
     const totalPages = Math.ceil(filteredExercises.length / rowsPerPage);
     const indexOfLast = currentPage * rowsPerPage;
@@ -41,7 +43,7 @@ function ExerciseList() {
                                 key={exercise._id}
                                 onClick={() => {
                                     setSelectedExercise(exercise);
-                                    setSelectedBodyPart(exercise.exerciseID.muscleGroup);
+                                    setSelectedBodyPart(exercise?.exerciseID?.muscleGroup);
                                 }}
                             >
                                 <td>{exercise?.name}</td>
