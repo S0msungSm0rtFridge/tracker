@@ -1,12 +1,13 @@
 .left-dash-board-container {
   width: 210px;
   height: 100vh; 
-  background-color: #f8f9fa;
+  background-color: #1e1e1e; /* darker sidebar */
+  color: #fff; 
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: 10px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
   position: fixed; 
   top: 0;
   left: 0;
@@ -18,20 +19,22 @@
   text-align: left;
   padding: 12px;
   font-size: 16px;
+  color: #ddd; 
   cursor: pointer;
   border-radius: 8px;
   margin-bottom: 8px;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 .left-dash-board-container button:hover {
-  background-color: #e9ecef;
+  background-color: #333;
+  color: #fff;
 }
 
 .left-dash-board-span {
   display: block;         
   height: 1px;         
-  background-color: #dee2e6; 
+  background-color: #444; 
   margin: 10px 0;        
   width: 100%;          
 }

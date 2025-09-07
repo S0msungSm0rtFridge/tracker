@@ -5,7 +5,7 @@ const ExerciseWrapper = createContext();
 export function ExerciseProvider( { children } ){
 
     const [selectedExercise, setSelectedExercise] = useState(null);
-    const [bodyPart, setSelectedBodyPart] = useState("All");
+    const [bodyPart, setSelectedBodyPart] = useState();
 
      return (
         <ExerciseWrapper.Provider value={{ selectedExercise, setSelectedExercise, bodyPart, setSelectedBodyPart }}>

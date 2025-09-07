@@ -5,6 +5,15 @@ import '../../styles/Login.css'
 import { useAuth } from "../wrappers/AuthProvider";
 
 function Authpage(){
+
+    const { user } = useAuth();
+
+    useEffect(() => {
+        if (user) {
+            navigate("/home", { replace: true }); 
+        }
+        }, [user]);
+
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const [userName, setUserName] = useState(false);
