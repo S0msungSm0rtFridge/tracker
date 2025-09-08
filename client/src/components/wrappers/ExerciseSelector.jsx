@@ -6,7 +6,7 @@ export function ExerciseProvider( { children } ){
 
     const [selectedExercise, setSelectedExercise] = useState();
     const [bodyPart, setSelectedBodyPart] = useState();
-
+    console.log(selectedExercise);
      return (
         <ExerciseWrapper.Provider value={{ selectedExercise, setSelectedExercise, bodyPart, setSelectedBodyPart }}>
             {children}

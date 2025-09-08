@@ -8,6 +8,7 @@ import { AuthProvider } from "./components/wrappers/AuthProvider";
 import { ExerciseProvider } from './components/wrappers/ExerciseSelector';
 import ProtectedRoute from "./components/Protection";
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>

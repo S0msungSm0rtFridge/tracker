@@ -15,7 +15,7 @@ const userSchema = new Schema({
         weight : { type: Number, required: false},
         reps : { type: Number, required: false},
         sets : { type: Number, required: false},
-        date : { type: Date, required: false}
+        date : [{ type: Date, required: false}]
     }]
 });
 

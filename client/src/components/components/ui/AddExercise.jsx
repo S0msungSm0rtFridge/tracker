@@ -15,6 +15,7 @@ function AddExercise({bodyPart}){
     const setsInput = useRef(null);
     const repsInput = useRef(null);
     const weightInput = useRef(null);
+    const dateInput = useRef(null);
 
     
     useEffect(() => {
@@ -37,7 +38,11 @@ function AddExercise({bodyPart}){
 
     const save = async () => {
 
-        if(!exerciseInput.current.value || !repsInput.current.value || !setsInput.current.value || !weightInput.current.value){
+        console.log(dateInput.current.value);
+        const dateString = dateInput.current.value; 
+        const selectedDate = new Date(dateString);
+
+        if(!exerciseInput.current.value || !repsInput.current.value || !setsInput.current.value || !weightInput.current.value || !dateInput.current.value){
             alert("please fill out all forms");
             return;
         }
@@ -62,7 +67,8 @@ function AddExercise({bodyPart}){
                     exerciseID: dup._id, 
                     weight: weightInput.current.value,
                     reps: repsInput.current.value,
-                    sets: setsInput.current.value
+                    sets: setsInput.current.value,
+                    date: selectedDate
                 },
                 { withCredentials: true }
             );
@@ -74,7 +80,8 @@ function AddExercise({bodyPart}){
                     name: exerciseInput.current.value,
                     weight: weightInput.current.value,
                     reps: repsInput.current.value,
-                    sets: setsInput.current.value
+                    sets: setsInput.current.value,
+                    date: selectedDate
                 },
                 { withCredentials: true }
             );
@@ -87,7 +94,7 @@ function AddExercise({bodyPart}){
 
     const isDup = () => {
 
-        if(!exerciseInput.current.value || !repsInput.current.value || !setsInput.current.value || !weightInput.current.value){
+        if(!exerciseInput.current.value || !repsInput.current.value || !setsInput.current.value || !weightInput.current.value || !dateInput.current.value){
             alert("please fill out all forms");
             return;
         }
@@ -126,6 +133,7 @@ function AddExercise({bodyPart}){
                 <input type = "number" ref = { weightInput } placeholder = "Weight" className = "add-exercise-page-number-input"></input>
                 <input type = "number" ref = { repsInput } placeholder = "number of reps" className = "add-exercise-page-number-input"></input>
                 <input type = "number" ref = { setsInput } placeholder = "number of sets" className = "add-exercise-page-number-input"></input>
+                <input type="date" className="add-exercise-page-number-input" ref={dateInput} />
             </div>
             <div className = "add-exercise-button-group">
                 <button className = "add-exercise-button" onClick = { () => navigate("/home")}>Cancel</button>
@@ -138,6 +146,7 @@ function AddExercise({bodyPart}){
 
 function EditExercise(){
 
+    const dateInput = useRef(null);
     const setsInput = useRef(null);
     const repsInput = useRef(null);
     const weightInput = useRef(null);
@@ -149,7 +158,11 @@ function EditExercise(){
 
     const save = async () => {
 
-        if(!repsInput.current.value || !setsInput.current.value || !weightInput.current.value){
+        console.log(dateInput.current.value);
+        const dateString = dateInput.current.value; 
+        const selectedDate = new Date(dateString);
+
+        if(!repsInput.current.value || !setsInput.current.value || !weightInput.current.value || !dateInput.current.value){
             alert("please fill out all forms");
             return;
         }
@@ -161,7 +174,8 @@ function EditExercise(){
                 exerciseID: exercise._id, 
                 weight: weightInput.current.value,
                 reps: repsInput.current.value,
-                sets: setsInput.current.value
+                sets: setsInput.current.value,
+                date: selectedDate
             },
             { withCredentials: true }
         );
@@ -172,7 +186,6 @@ function EditExercise(){
 
     const del = async () => {
         try{
-            console.log("runs")
             await axios.put(
             "http://localhost:5000/api/users/removeExercise",
             {
@@ -198,6 +211,8 @@ function EditExercise(){
                 <input type = "number" ref = { weightInput } placeholder = "Weight" className = "add-exercise-page-number-input"></input>
                 <input type = "number" ref = { repsInput } placeholder = "number of reps" className = "add-exercise-page-number-input"></input>
                 <input type = "number" ref = { setsInput } placeholder = "number of sets" className = "add-exercise-page-number-input"></input>
+                <input type="date" className="add-exercise-page-number-input" ref={dateInput} />
+
             </div>
             <div className = "add-exercise-button-group">
                 <button className = "add-exercise-button" onClick = { () => navigate("/home")}>Cancel</button>

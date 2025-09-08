@@ -2,7 +2,7 @@ import '../../../styles/LiftingWeightChart.css'
 import { useExercise } from '../../wrappers/ExerciseSelector';
 import { memo } from "react";
 
-function LiftingWeightChartComponent() {
+function VideoPlayer() {
 
     const { selectedExercise } = useExercise();
     if (!selectedExercise?.exerciseID?.videoUrl) return null;
@@ -22,4 +22,4 @@ function LiftingWeightChartComponent() {
     );
 }
 
-export const LiftingWeightChart = memo(LiftingWeightChartComponent);
+export {VideoPlayer}

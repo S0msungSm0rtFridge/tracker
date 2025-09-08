@@ -112,14 +112,14 @@ router.put('/height', async (req, res) => {
 //add exercise
 router.put('/addExercise', authenticateToken, async (req, res) => {
     console.log(req.user.id);
-    const { exerciseID, name, weight, reps, sets, } = req.body;
+    const { exerciseID, name, weight, reps, sets, date} = req.body;
     if( !exerciseID){
         return res.status(400).send("Need valid inputs"); 
     }
     try {
         const user = await User.findByIdAndUpdate(
             req.user.id,
-            { $push: { exercises : {exerciseID, name, weight, reps, sets } } },
+            { $push: { exercises : {exerciseID, name, weight, reps, sets, date } } },
             { new: true }
         ).populate('exercises.exerciseID');
         if(!user){
@@ -133,7 +133,7 @@ router.put('/addExercise', authenticateToken, async (req, res) => {
 
 //edit exercise
 router.put('/editExercise', authenticateToken, async (req, res) => {
-    const { exerciseID, weight, reps, sets } = req.body; 
+    const { exerciseID, weight, reps, sets, date } = req.body; 
     if( !exerciseID || !weight || !reps || !sets ){
         return res.status(400).send("Need valid inputs");
     }   
@@ -144,7 +144,11 @@ router.put('/editExercise', authenticateToken, async (req, res) => {
                 "exercises.$.weight": weight,
                 "exercises.$.reps": reps,
                 "exercises.$.sets": sets,
-            }},
+            },
+                $push: {
+                    "exercises.$.date": date  
+                }
+            },
             { new: true }
         ).populate('exercises.exerciseID');
         if(!user){
@@ -177,6 +181,36 @@ router.put('/removeExercise', authenticateToken, async (req, res) => {
         console.log(error);
         res.status(500).json({error : "failed to remove exercise"});
     }   
+});
+
+//remove a date
+router.put('/removeDate', authenticateToken, async (req, res) => {
+    const { exerciseID, dateToRemove } = req.body;
+
+    if (!exerciseID || !dateToRemove) {
+        return res.status(400).json({ error: "exerciseID and dateToRemove are required" });
+    }
+
+    try {
+        const date = new Date(dateToRemove);
+
+        const user = await User.findOneAndUpdate(
+            { _id: req.user.id, "exercises._id": exerciseID },
+            {
+                $pull: { "exercises.$.date": date }
+            },
+            { new: true }
+        ).populate("exercises.exerciseID");
+
+        if (!user) {
+            return res.status(404).json({ error: "User or exercise not found" });
+        }
+
+        res.json({ message: "Date removed successfully", user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to remove date" });
+    }
 });
 
 module.exports = router;
