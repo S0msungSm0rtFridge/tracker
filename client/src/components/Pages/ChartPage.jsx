@@ -3,7 +3,7 @@ import { Line } from "react-chartjs-2";
 import { Outlet } from "react-router-dom"; 
 import { useExercise } from "../wrappers/ExerciseSelector";
 import '../../styles/ProgressChart.css';
-import { useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../wrappers/AuthProvider";
 
 import {
@@ -35,10 +35,14 @@ function ProgressChart({mode, setMode}) {
 
 function LiftingProgressChart({mode, setMode}){
 
-    const { selectedExercise } = useExercise();
-
+    const { selectedExercise, setSelectedExercise, setSelectedBodyPart } = useExercise();
+    const { user } = useAuth();
+    
+    useEffect(() => {
+        setSelectedBodyPart(null);
+    },[])
     if (!selectedExercise) {
-        return null;
+        setSelectedExercise(user?.data?.exercises[0]);
     }
     const extractData = (arr) => {
         if (!arr?.length) return { labels: [], values: [] };
