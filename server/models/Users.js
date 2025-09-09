@@ -5,7 +5,7 @@ const userSchema = new Schema({
     userName : { type: String, required: true, unique: true},
     /* MIGHT WANNA ENCRYPT THE PASS WORD, MAY DO LTER */
     password : { type: String, required: true},
-    bodyWeight : { type: Number, required: false},
+    bodyWeight : [{value: Number, date: Date, note: String}],
     age : {type: Number, required: false},
     height : {type: Number, required: false},
 

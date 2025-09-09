@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from "react"
 import axios from "axios"
-import '../../../styles/AddExercise.css'
+import '../../styles/AddExercise.css'
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth  } from '../../wrappers/AuthProvider'
+import { useAuth  } from '../wrappers/AuthProvider'
+import { useExercise } from "../wrappers/ExerciseSelector";
 
 
 function AddExercise({bodyPart}){
-
+    const { setSelectedExercise } = useExercise();
     const { user, refreshUser } = useAuth();
     const navigate = useNavigate();
 

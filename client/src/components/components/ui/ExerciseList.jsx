@@ -1,12 +1,14 @@
 import '../../../styles/ExerciseList.css'
 import { useExercise } from '../../wrappers/ExerciseSelector';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth  } from '../../wrappers/AuthProvider'
 import { useState } from 'react';
 
 
 function ExerciseList() {
 
+    const location = useLocation();
+    const isProgressCharts = location.pathname.includes("progress-charts");
     const { user } = useAuth();
     const navigate = useNavigate();
     const { setSelectedExercise, setSelectedBodyPart, bodyPart } = useExercise();
@@ -43,7 +45,7 @@ function ExerciseList() {
                                 key={exercise._id}
                                 onClick={() => {
                                     setSelectedExercise(exercise);
-                                    setSelectedBodyPart(exercise?.exerciseID?.muscleGroup);
+                                    !isProgressCharts ? setSelectedBodyPart(exercise?.exerciseID?.muscleGroup) : null;
                                 }}
                             >
                                 <td>{exercise?.name}</td>

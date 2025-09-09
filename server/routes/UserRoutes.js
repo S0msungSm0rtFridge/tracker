@@ -49,15 +49,24 @@ router.post('/', async (req, res) => {
 });
 
 //add bodyweight
-router.put('/bodyweight', async (req, res) => {
-    const { bodyWeight } = req.body;
-    if( !bodyWeight){
+router.put('/bodyweight', authenticateToken, async (req, res) => {
+    
+    const { bodyWeight, date, note } = req.body;
+
+    if( !bodyWeight || !date){
         return res.status(400).send("Need valid inputs");
     }
     try {
+
+        const newBodyWeightEntry = {
+            value: bodyWeight,
+            date: new Date(date),  
+            note: note || ""
+        };
+
         const user = await User.findByIdAndUpdate(
-            
-            { bodyWeight },
+            req.user.id,
+            { $push: { bodyWeight : newBodyWeightEntry } },
             { new: true }
         );
         if(!user){
@@ -68,6 +77,62 @@ router.put('/bodyweight', async (req, res) => {
         res.status(500).json({error : "failed to update bodyweight"});
     }
 });
+
+//edit bnodyweight
+router.put('/bodyweight/edit', authenticateToken, async (req, res) => {
+    const { bodyWeight, date, note } = req.body;
+
+    if (!bodyWeight || !date) {
+        return res.status(400).send("Need valid inputs");
+    }
+
+    try {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: req.user.id, "bodyWeight.date": new Date(date) },
+            {
+                $set: {
+                    "bodyWeight.$.value": bodyWeight,
+                    "bodyWeight.$.note": note || ""
+                }
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send("Bodyweight entry not found for the given date");
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update bodyweight entry" });
+    }
+});
+
+//deleted bodyWeight
+router.put('/removeBodyWeight', authenticateToken, async (req, res) => {
+    const { date } = req.body;
+
+    if (!date) {
+        return res.status(400).send("Date is required to delete bodyweight entry");
+    }
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { $pull: { bodyWeight: { date: new Date(date) } } },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send("User not found");
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete bodyweight entry" });
+    }
+});
+
 //change height
 router.put('/height', async (req, res) => {
     const { height } = req.body;
