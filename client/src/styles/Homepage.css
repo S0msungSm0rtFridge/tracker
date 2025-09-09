@@ -13,3 +13,12 @@
     margin-right: 0;   
     padding-right: 0;
 }
+
+.progress-chart-full {
+  flex: 1; 
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 250px;
+  align-items: flex-start;
+  height: 100vh;
+}

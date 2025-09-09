@@ -117,9 +117,17 @@ router.put('/addExercise', authenticateToken, async (req, res) => {
         return res.status(400).send("Need valid inputs"); 
     }
     try {
+
+        const exerciseEntry = {
+            exerciseID,
+            name,
+            weight: [{ value: weight, date }],
+            reps: [{ value: reps, date }],
+            sets: [{ value: sets, date }],
+        };
         const user = await User.findByIdAndUpdate(
             req.user.id,
-            { $push: { exercises : {exerciseID, name, weight, reps, sets, date } } },
+            { $push: { exercises : exerciseEntry } },
             { new: true }
         ).populate('exercises.exerciseID');
         if(!user){
@@ -133,32 +141,49 @@ router.put('/addExercise', authenticateToken, async (req, res) => {
 
 //edit exercise
 router.put('/editExercise', authenticateToken, async (req, res) => {
-    const { exerciseID, weight, reps, sets, date } = req.body; 
-    if( !exerciseID || !weight || !reps || !sets ){
+    const { exerciseID, weight, reps, sets, date } = req.body;
+
+    if (!exerciseID || weight === undefined || reps === undefined || sets === undefined || !date) {
         return res.status(400).send("Need valid inputs");
-    }   
+    }
+
     try {
-        const user = await User.findOneAndUpdate(
-            { _id: req.user.id, "exercises._id": exerciseID }, 
-            { $set: {
-                "exercises.$.weight": weight,
-                "exercises.$.reps": reps,
-                "exercises.$.sets": sets,
-            },
-                $push: {
-                    "exercises.$.date": date  
-                }
-            },
-            { new: true }
-        ).populate('exercises.exerciseID');
-        if(!user){
-            return res.status(404).send("could not find the user, an error has occur");
+        const user = await User.findOne({ _id: req.user.id, "exercises._id": exerciseID });
+        if (!user) {
+            return res.status(404).send("Could not find the user, an error has occurred");
         }
+
+        
+        const exercise = user.exercises.id(exerciseID);
+        if (!exercise) {
+            return res.status(404).send("Exercise not found");
+        }
+
+        
+        const upsertByDate = (arr, value) => {
+            const index = arr.findIndex(entry => entry.date.toISOString() === new Date(date).toISOString());
+            if (index !== -1) {
+                arr[index].value = value; 
+            } else {
+                arr.push({ value, date });
+            }
+        };
+
+        upsertByDate(exercise.weight, weight);
+        upsertByDate(exercise.reps, reps);
+        upsertByDate(exercise.sets, sets);
+
+        await user.save();
+        await user.populate('exercises.exerciseID');
+
         res.json(user);
-    }catch (error){
-        res.status(500).json({error : "failed to edit exercise"});
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to edit exercise" });
     }
 });
+
 
 //remove exercise
 router.put('/removeExercise', authenticateToken, async (req, res) => {
@@ -193,11 +218,18 @@ router.put('/removeDate', authenticateToken, async (req, res) => {
 
     try {
         const date = new Date(dateToRemove);
+        if (isNaN(date)) {
+            return res.status(400).json({ error: "Invalid dateToRemove format" });
+        }
 
         const user = await User.findOneAndUpdate(
             { _id: req.user.id, "exercises._id": exerciseID },
             {
-                $pull: { "exercises.$.date": date }
+            $pull: {
+                "exercises.$.weight": { date },
+                "exercises.$.reps": { date },
+                "exercises.$.sets": { date }
+            }
             },
             { new: true }
         ).populate("exercises.exerciseID");
@@ -212,5 +244,6 @@ router.put('/removeDate', authenticateToken, async (req, res) => {
         res.status(500).json({ error: "Failed to remove date" });
     }
 });
+
 
 module.exports = router;

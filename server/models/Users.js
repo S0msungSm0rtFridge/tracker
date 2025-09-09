@@ -12,10 +12,9 @@ const userSchema = new Schema({
     exercises : [{
         exerciseID : { type: Schema.Types.ObjectId, ref: 'Exercise' },
         name : { type: String, required: false},
-        weight : { type: Number, required: false},
-        reps : { type: Number, required: false},
-        sets : { type: Number, required: false},
-        date : [{ type: Date, required: false}]
+        weight : [{ value: Number, date: Date}],
+        reps : [{ value: Number, date: Date}],
+        sets : [{ value: Number, date: Date}],
     }]
 });
 

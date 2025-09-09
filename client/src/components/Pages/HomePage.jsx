@@ -14,28 +14,34 @@ import { useAuth } from '../wrappers/AuthProvider'
 import '../../styles/Homepage.css'
 
 function Homepage() {
-
     const location = useLocation();
     const isProgressCharts = location.pathname.includes("progress-charts");
-    console.log(isProgressCharts);
+    
+
     return (
         <div className="home-page-main-container">
             <LeftDashBoard />
-            {!isProgressCharts && <BodyPartGrid />}
-            
-            <div className="home-page-right-side-container">
-            <ExerciseList />
+
+            <div className={isProgressCharts ? "progress-chart-full" : ""}>
+                {!isProgressCharts && <BodyPartGrid />}
+
                 <Routes>
+                    <Route path="progress-charts/*" element={<ProgressChart />}>
+                        <Route path="add-exercise" element={<AddExercise />} />
+                        <Route path="edit/:exerciseId" element={<EditExercise />} />
+                    </Route>
+
                 <Route path="add-exercise" element={<AddExercise />} />
                 <Route path="edit/:exerciseId" element={<EditExercise />} />
-                <Route path="progress-charts" element={<ProgressChart />}/>
                 </Routes>
-
-                {/* Chart can always show */}
-                {/* <VideoPlayer /> */}
             </div>
-        </div>
-        );
-    }
+
+            <div className="home-page-right-side-container">
+                <ExerciseList />
+                {/** video player here */}
+            </div>
+</div>
+);
+}
 
 export { Homepage };

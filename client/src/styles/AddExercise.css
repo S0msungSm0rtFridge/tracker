@@ -35,14 +35,15 @@
 /* Inputs */
 .add-exercise-page-exercise-name,
 .add-exercise-page-number-input {
-  width: 100%;
+  width: 80%; 
+  margin: 8px auto; 
   padding: 10px;
-  margin: 8px 0;
   border-radius: 8px;
   border: 1px solid #333;
   background: #1e1e1e;
   color: #fff;
   outline: none;
+  display: block; 
 }
 
 .add-exercise-page-exercise-name:focus,

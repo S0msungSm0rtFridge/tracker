@@ -136,7 +136,7 @@ function AddExercise({bodyPart}){
                 <input type="date" className="add-exercise-page-number-input" ref={dateInput} />
             </div>
             <div className = "add-exercise-button-group">
-                <button className = "add-exercise-button" onClick = { () => navigate("/home")}>Cancel</button>
+                <button className = "add-exercise-button" onClick = { () => navigate(-1)}>Cancel</button>
                 <button className = "add-exercise-button" onClick = { () => save()}>Save</button>
                 <button className = "add-exercise-button" onClick = { () => isDup()}>Add New Exercise</button>
             </div>
@@ -215,7 +215,7 @@ function EditExercise(){
 
             </div>
             <div className = "add-exercise-button-group">
-                <button className = "add-exercise-button" onClick = { () => navigate("/home")}>Cancel</button>
+                <button className = "add-exercise-button" onClick = { () => navigate(-1)}>Cancel</button>
                 <button className = "add-exercise-button" onClick = { () => save()}>Save</button>
                 <button className = "add-exercise-button" onClick = { () => del()}>delete</button>
             </div>

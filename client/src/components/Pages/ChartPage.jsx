@@ -1,81 +1,91 @@
-
-To create a chart in React that matches the style and functionality shown in the image, a good approach is to use a charting library like Recharts or Chart.js. The example below uses Recharts because it provides strong support for area charts, custom axes, tooltips, and easy styling.
-
-React Chart Example
-Here’s a sample React component using Recharts that resembles the chart in your screenshot. It displays progress for Bench Press, Deadlift, and Squats, with area fill, axis labels, legend, and styled data points.
-
-jsx
 import React from "react";
+import { Line } from "react-chartjs-2";
+import { Outlet } from "react-router-dom"; // Import Outlet
+import '../../styles/ProgressChart.css';
+
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from "recharts";
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
 
-// Example data mimicking the screenshot
-const data = [
-  { date: "30/12/2023", BenchPress: 90, Deadlift: null, Squats: null },
-  { date: "30/12/2023", BenchPress: 100, Deadlift: 110, Squats: null },
-  { date: "30/12/2023", BenchPress: 105, Deadlift: 120, Squats: null },
-  { date: "30/12/2023", BenchPress: null, Deadlift: 130, Squats: 90 },
-  { date: "01/01/2024", BenchPress: null, Deadlift: null, Squats: 120 },
-  { date: "01/01/2024", BenchPress: null, Deadlift: null, Squats: 115 }
-];
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, Filler);
 
-const COLORS = {
-  BenchPress: "#eb6165",
-  Deadlift: "#68c1c8",
-  Squats: "#68c890"
-};
+function ProgressChart() {
+  const labels = ["30/12/2023", "31/12/2023", "01/01/2024"];
 
-const ProgressChart = () => (
-  <ResponsiveContainer width="100%" height={300}>
-    <AreaChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
-      <CartesianGrid stroke="#2c2c2c" vertical={false} />
-      <XAxis dataKey="date" tick={{ fill: "#aaa" }} axisLine={false} />
-      <YAxis
-        domain={[75, 135]}
-        ticks={[76, 91, 106, 121, 135]}
-        tick={{ fill: "#aaa" }}
-        axisLine={false}
-        unit="kg"
-      />
-      <Tooltip />
-      <Legend
-        verticalAlign="bottom"
-        align="left"
-        iconType="plainline"
-        formatter={(value) => (
-          <span style={{ color: COLORS[value], marginLeft: 4 }}>{value}</span>
-        )}
-      />
-      <Area
-        type="monotone"
-        dataKey="BenchPress"
-        stroke={COLORS.BenchPress}
-        fill={COLORS.BenchPress}
-        fillOpacity={0.3}
-        activeDot={{ r: 5 }}
-        connectNulls
-      />
-      <Area
-        type="monotone"
-        dataKey="Deadlift"
-        stroke={COLORS.Deadlift}
-        fill={COLORS.Deadlift}
-        fillOpacity={0.3}
-        activeDot={{ r: 5 }}
-        connectNulls
-      />
-      <Area
-        type="monotone"
-        dataKey="Squats"
-        stroke={COLORS.Squats}
-        fill={COLORS.Squats}
-        fillOpacity={0.3}
-        activeDot={{ r: 5 }}
-        connectNulls
-      />
-    </AreaChart>
-  </ResponsiveContainer>
-);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Bench Press",
+        data: [80, 95, 105],
+        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 0.3)",
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: "rgba(255, 99, 132, 1)",
+      },
+      {
+        label: "Deadlift",
+        data: [100, 120, 135],
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.3)",
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: "rgba(54, 162, 235, 1)",
+      },
+      {
+        label: "Squats",
+        data: [90, 105, 120],
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.3)",
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: "rgba(75, 192, 192, 1)",
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: "#fff", // white legend text
+        },
+      },
+      tooltip: {
+        mode: "index",
+        intersect: false,
+      },
+    },
+    scales: {
+      x: {
+        ticks: { color: "#aaa" },
+        grid: { color: "rgba(255,255,255,0.1)" },
+      },
+      y: {
+        ticks: {
+          color: "#aaa",
+          callback: (value) => value + "kg",
+        },
+        grid: { color: "rgba(255,255,255,0.1)" },
+      },
+    },
+  };
+
+  return (
+    <div className="progress-chart-container">
+      <Line data={data} options={options} />
+      <Outlet /> {/* This will render any nested route content, like AddExercise or EditExercise */}
+    </div>
+  );
+}
 
 export { ProgressChart }

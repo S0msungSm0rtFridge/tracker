@@ -47,9 +47,9 @@ function ExerciseList() {
                                 }}
                             >
                                 <td>{exercise?.name}</td>
-                                <td>{exercise?.weight}</td>
-                                <td>{exercise?.reps}</td>
-                                <td>{exercise?.sets}</td>
+                                <td>{exercise?.weight[exercise.weight.length - 1]?.value}</td>
+                                <td>{exercise?.reps[exercise.reps.length - 1]?.value}</td>
+                                <td>{exercise?.sets[exercise.sets.length - 1]?.value}</td>
                                 <th onClick={(e) => { 
                                     e.stopPropagation(); 
                                     navigate(`edit/${exercise?._id}`);
