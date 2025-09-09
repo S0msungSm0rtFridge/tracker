@@ -89,7 +89,7 @@ function AddExercise({bodyPart}){
 
             
         refreshUser();
-        navigate("/home");
+        navigate(-1);
     }
 
     const isDup = () => {
@@ -181,7 +181,7 @@ function EditExercise(){
         );
 
         refreshUser();
-        navigate("/home");
+        navigate(-1);
     }
 
     const del = async () => {
@@ -197,7 +197,7 @@ function EditExercise(){
             console.log(error);
         }
         refreshUser();
-        navigate("/home");
+        navigate(-1);
     }
 
 

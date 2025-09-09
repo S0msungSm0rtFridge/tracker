@@ -1,91 +1,91 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { Outlet } from "react-router-dom"; // Import Outlet
+import { Outlet } from "react-router-dom"; 
+import { useExercise } from "../wrappers/ExerciseSelector";
 import '../../styles/ProgressChart.css';
 
 import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-  Filler,
+    Chart as ChartJS,
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    Tooltip,
+    Legend,
+    Filler,
 } from "chart.js";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, Filler);
 
 function ProgressChart() {
-  const labels = ["30/12/2023", "31/12/2023", "01/01/2024"];
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "Bench Press",
-        data: [80, 95, 105],
-        borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 0.3)",
-        fill: true,
-        tension: 0.3,
-        pointBackgroundColor: "rgba(255, 99, 132, 1)",
-      },
-      {
-        label: "Deadlift",
-        data: [100, 120, 135],
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(54, 162, 235, 0.3)",
-        fill: true,
-        tension: 0.3,
-        pointBackgroundColor: "rgba(54, 162, 235, 1)",
-      },
-      {
-        label: "Squats",
-        data: [90, 105, 120],
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.3)",
-        fill: true,
-        tension: 0.3,
-        pointBackgroundColor: "rgba(75, 192, 192, 1)",
-      },
-    ],
-  };
+    const { selectedExercise } = useExercise();
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        labels: {
-          color: "#fff", // white legend text
-        },
-      },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-      },
-    },
-    scales: {
-      x: {
-        ticks: { color: "#aaa" },
-        grid: { color: "rgba(255,255,255,0.1)" },
-      },
-      y: {
-        ticks: {
-          color: "#aaa",
-          callback: (value) => value + "kg",
-        },
-        grid: { color: "rgba(255,255,255,0.1)" },
-      },
-    },
-  };
+    if (!selectedExercise) {
+        return null;
+    }
 
-  return (
-    <div className="progress-chart-container">
-      <Line data={data} options={options} />
-      <Outlet /> {/* This will render any nested route content, like AddExercise or EditExercise */}
-    </div>
-  );
+    const extractData = (arr) => {
+        if (!arr?.length) return { labels: [], values: [] };
+
+        const sorted = arr.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+        const labels = sorted.map(e => new Date(e.date).toLocaleDateString());
+        const values = sorted.map(e => e.value);
+        return { labels, values };
+    };
+
+    const weightData = extractData(selectedExercise.weight);
+    const repsData = extractData(selectedExercise.reps);
+    const setsData = extractData(selectedExercise.sets);
+
+    const allDatesSet = new Set([...weightData.labels, ...repsData.labels, ...setsData.labels]);
+    const labels = Array.from(allDatesSet).sort((a, b) => new Date(a) - new Date(b));
+
+    const mapValuesToLabels = (labels, dataLabels, dataValues) =>
+        labels.map(label => {
+            const index = dataLabels.indexOf(label);
+            return index !== -1 ? dataValues[index] : null;
+        });
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: "Weight",
+                data: mapValuesToLabels(labels, weightData.labels, weightData.values),
+                borderColor: "rgba(255, 99, 132, 1)",
+                backgroundColor: "rgba(255, 99, 132, 0.3)",
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: "rgba(255, 99, 132, 1)",
+            },
+            {
+                label: "Reps",
+                data: mapValuesToLabels(labels, repsData.labels, repsData.values),
+                borderColor: "rgba(54, 162, 235, 1)",
+                backgroundColor: "rgba(54, 162, 235, 0.3)",
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: "rgba(54, 162, 235, 1)",
+            },
+            {
+                label: "Sets",
+                data: mapValuesToLabels(labels, setsData.labels, setsData.values),
+                borderColor: "rgba(75, 192, 192, 1)",
+                backgroundColor: "rgba(75, 192, 192, 0.3)",
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: "rgba(75, 192, 192, 1)",
+            },
+        ],
+    };
+
+    return (
+        <div className="progress-chart-container">
+            <Line data={data} />
+            <Outlet /> 
+        </div>
+    );
 }
 
 export { ProgressChart }
