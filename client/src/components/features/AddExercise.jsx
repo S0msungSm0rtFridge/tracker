@@ -7,7 +7,6 @@ import { useExercise } from "../wrappers/ExerciseSelector";
 
 
 function AddExercise({bodyPart}){
-    const { setSelectedExercise } = useExercise();
     const { user, refreshUser } = useAuth();
     const navigate = useNavigate();
 
@@ -73,6 +72,7 @@ function AddExercise({bodyPart}){
                 },
                 { withCredentials: true }
             );
+
         } else {
             await axios.put(
                 "http://localhost:5000/api/users/addExercise",
@@ -87,8 +87,6 @@ function AddExercise({bodyPart}){
                 { withCredentials: true }
             );
         }
-
-            
         refreshUser();
         navigate(-1);
     }

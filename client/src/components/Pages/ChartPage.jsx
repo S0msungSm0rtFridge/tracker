@@ -15,9 +15,10 @@ import {
     Tooltip,
     Legend,
     Filler,
+    Title
 } from "chart.js";
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, Filler);
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, Filler, Title);
 
 function ProgressChart({mode, setMode}) {
 
@@ -65,7 +66,7 @@ function LiftingProgressChart({mode, setMode}){
             const index = dataLabels.indexOf(label);
             return index !== -1 ? dataValues[index] : null;
         });
-
+    const title = selectedExercise.name;
     const data = {
         labels,
         datasets: [
@@ -104,7 +105,7 @@ function LiftingProgressChart({mode, setMode}){
         plugins: {
             legend: {
             labels: {
-                color: "#aaa", // legend text
+                color: "#aaa", 
                 padding: 16,
                 font: { size: 14 },
             },
@@ -118,7 +119,21 @@ function LiftingProgressChart({mode, setMode}){
             borderColor: "#444",
             borderWidth: 1,
             },
-        },
+            title: {
+            display: true,
+            text: title, 
+            color: "#fff",
+            position: "bottom",
+            font: {
+                size: 22,
+                family: "inherit",
+                weight: "bold"
+            },
+            padding: {
+                top: 16,
+                bottom: 8
+            }
+        }},
         scales: {
             x: {
             ticks: {

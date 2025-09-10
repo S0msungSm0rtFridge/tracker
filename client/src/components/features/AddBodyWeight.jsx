@@ -14,23 +14,23 @@ function BodyWeightTable(){
     };
 
     return (
-        <div className = "right-side-table-container">
+        <div className="right-side-table-container">
             {renderTable()}
-            <button className = "right-side-table-button" onClick = {() => setState("Add")}>Add</button>
-            <button className = "right-side-table-button" onClick = {() => setState("Edit")}>Edit</button>
-            <button className = "right-side-table-button" onClick = {() => setState("Delete")}>Delete</button>
-
+            <div className="right-side-table-action-buttons">
+                <button className="right-side-table-button" onClick={() => setState("Add")}>Add</button>
+                <button className="right-side-table-button" onClick={() => setState("Edit")}>Edit</button>
+                <button className="right-side-table-button" onClick={() => setState("Delete")}>Delete</button>
+            </div>
         </div>
     )
 }
-function AddBodyWeightTable({}) {
-    const {user, refreshUser} = useAuth();
-    const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]); // YYYY-MM-DD
+function AddBodyWeightTable() {
+    const { user, refreshUser } = useAuth();
+    const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]);
     const [weight, setWeight] = useState("");
     const [notes, setNotes] = useState("");
+    const existing = user?.data?.bodyWeight || [];
 
-    const existing = user?.data?.bodyWeight;
-    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!weight || weight <= 0) {
@@ -38,90 +38,77 @@ function AddBodyWeightTable({}) {
             return;
         }
 
-        const existingEntry = existing?.find(entry => entry.date.slice(0, 10) === date);
-
+        const existingEntry = existing.find(entry => entry.date.slice(0, 10) === date);
 
         try {
-            if(existingEntry){
+            if (existingEntry) {
                 await axios.put(
                     "http://localhost:5000/api/users/bodyweight/edit", 
-                    {
-                        date,
-                        bodyWeight: parseFloat(weight),
-                        note: notes
-                    },
+                    { date, bodyWeight: parseFloat(weight), note: notes },
                     { withCredentials: true }
                 );
-            }else{
-                await axios.put("http://localhost:5000/api/users/bodyweight",  
-                    {
-                        bodyWeight: weight,
-                        date: date,    
-                        note: notes
-                    }, 
-                    { withCredentials: true });
+            } else {
+                await axios.put(
+                    "http://localhost:5000/api/users/bodyweight",  
+                    { bodyWeight: weight, date, note: notes }, 
+                    { withCredentials: true }
+                );
             }
             refreshUser();
-        } catch (err){
+        } catch (err) {
             console.log(err);
         }
 
         setWeight("");
         setNotes("");
-        setDate(new Date());
-
-        
+        setDate(new Date().toISOString().split("T")[0]);
     };
 
     return (
-        <div className="add-bodyweight-container">
-            <h2>Add Bodyweight Entry</h2>
-            <form onSubmit={handleSubmit} className="add-bodyweight-form">
+        <div className="bodyweight-container">
+            <div className="bodyweight-header">Add Bodyweight Entry</div>
+            <form onSubmit={handleSubmit} className="bodyweight-form">
                 <label>
                     Date:
                     <input
                         type="date"
                         value={date}
-                        onChange={(e) => setDate(e.target.value)}
+                        onChange={e => setDate(e.target.value)}
                         required
                     />
                 </label>
-
                 <label>
                     Weight (kg):
                     <input
                         type="number"
                         step="0.1"
                         value={weight}
-                        onChange={(e) => setWeight(e.target.value)}
+                        onChange={e => setWeight(e.target.value)}
                         required
                     />
                 </label>
-
                 <label>
                     Notes:
                     <input
                         type="text"
                         value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
+                        onChange={e => setNotes(e.target.value)}
                         placeholder="Optional"
                     />
                 </label>
-
                 <button type="submit">Save</button>
             </form>
         </div>
     );
 }
 
-function EditBodyWeightTable() {
-    const {user, refreshUser} = useAuth();
 
+function EditBodyWeightTable() {
+    const { user, refreshUser } = useAuth();
     const [selectedDate, setSelectedDate] = useState("");
     const [weight, setWeight] = useState("");
     const [notes, setNotes] = useState("");
-
-    const existing = user?.data?.bodyWeight;
+    const existing = user?.data?.bodyWeight || [];
 
     useEffect(() => {
         if (!selectedDate) {
@@ -129,7 +116,7 @@ function EditBodyWeightTable() {
             setNotes("");
             return;
         }
-        const entry = existing.find(e => e.date.startsWith(selectedDate));
+        const entry = existing.find(e => e.date.slice(0, 10) === selectedDate);
         if (entry) {
             setWeight(entry.value.toString());
             setNotes(entry.note || "");
@@ -143,13 +130,9 @@ function EditBodyWeightTable() {
             return;
         }
         try {
-            const response = await axios.put(
+            await axios.put(
                 "http://localhost:5000/api/users/bodyweight/edit",
-                {
-                    date: selectedDate,
-                    bodyWeight: parseFloat(weight),
-                    note: notes,
-                },
+                { date: selectedDate, bodyWeight: parseFloat(weight), note: notes },
                 { withCredentials: true }
             );
             refreshUser();
@@ -160,20 +143,18 @@ function EditBodyWeightTable() {
     };
 
     return (
-        <div className="add-bodyweight-container">
-            <h2>Edit Bodyweight Entry</h2>
-            <form onSubmit={handleSubmit} className="add-bodyweight-form">
+        <div className="bodyweight-container">
+            <div className="bodyweight-header">Edit Bodyweight Entry</div>
+            <form onSubmit={handleSubmit} className="bodyweight-form">
                 <label>
                     Select Date:
                     <select
                         value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        onChange={e => setSelectedDate(e.target.value)}
                         required
                     >
-                        <option value="" disabled>
-                            Select a date
-                        </option>
-                        {existing.map((entry) => (
+                        <option value="" disabled>Select a date</option>
+                        {existing.map(entry => (
                             <option key={entry.date} value={entry.date.slice(0, 10)}>
                                 {entry.date.slice(0, 10)}
                             </option>
@@ -186,7 +167,7 @@ function EditBodyWeightTable() {
                         type="number"
                         step="0.1"
                         value={weight}
-                        onChange={(e) => setWeight(e.target.value)}
+                        onChange={e => setWeight(e.target.value)}
                         required
                     />
                 </label>
@@ -195,17 +176,16 @@ function EditBodyWeightTable() {
                     <input
                         type="text"
                         value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
+                        onChange={e => setNotes(e.target.value)}
                         placeholder="Optional"
                     />
                 </label>
-                <button type="submit" disabled={!selectedDate}>
-                    Update
-                </button>
+                <button type="submit" disabled={!selectedDate}>Update</button>
             </form>
         </div>
     );
 }
+
 
 function DeleteBodyWeightTable() {
     const {user, refreshUser} = useAuth();
@@ -241,7 +221,7 @@ function DeleteBodyWeightTable() {
     };
 
     return (
-        <div className="add-bodyweight-container">
+        <div className="delete-bodyweight-container">
             <h2>Delete Bodyweight Entry</h2>
             <label>
                 Select Date:

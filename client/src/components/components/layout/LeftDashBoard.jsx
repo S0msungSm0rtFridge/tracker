@@ -11,7 +11,6 @@ function LeftDashBoard() {
             <h2 className = "left-dash-board-heading">Tracker</h2>
             <span className = "left-dash-board-span"></span>
             <button className = "left-dash-board-home-button" onClick = { () => navigate("/home")}>Home</button>
-            <button className = "left-dash-board-dash-board-button">DashBoard</button>
             <button className="left-dash-board-dash-board-button"
             onClick={() => {
                 if (location.pathname !== '/home/progress-charts') {
@@ -19,6 +18,8 @@ function LeftDashBoard() {
                 }
             }}
             >Progress Charts</button>
+            <button className = "left-dash-board-dash-board-button" onClick = {() => alert("This has not been implimented")}>Programs</button>
+            <button className = "left-dash-board-dash-board-button" onClick = {() => alert("This has not been implimented")}>Calorie Tracker</button>
             <button className = "left-dash-board-dash-board-button" onClick = { () => logout()}>Logout</button>
         </div>
     )

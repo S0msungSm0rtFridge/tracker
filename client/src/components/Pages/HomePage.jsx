@@ -40,7 +40,7 @@ function Homepage() {
 
             <div className="home-page-right-side-container">
                 {(isProgressCharts && mode === "Bodyweight")? <BodyWeightTable /> : <ExerciseList />}
-                {/** video player here */}
+                {(isProgressCharts && mode === "Bodyweight")? <></> : <VideoPlayer />}
             </div>
 </div>
 );
